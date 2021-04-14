@@ -1,0 +1,235 @@
+call plug#begin('~/.vim/plugged')
+
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'Xuyuanp/nerdtree-git-plugin'
+
+Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plug 'AndrewRadev/splitjoin.vim'
+Plug 'mattn/emmet-vim'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
+Plug 'SirVer/ultisnips'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'robertbasic/vim-hugo-helper'
+Plug 'tpope/vim-fugitive'
+Plug 'w0rp/ale'
+Plug 'bufbuild/vim-buf'
+Plug 'uber/prototool', { 'rtp':'vim/prototool' }
+Plug 'honza/vim-snippets'
+Plug 'elzr/vim-json'
+" Plug 'fatih/molokai'
+Plug 'cakebaker/scss-syntax.vim'
+Plug 'itchyny/lightline.vim'
+Plug 'ryanoasis/vim-devicons'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes' 
+Plug 'gko/vim-coloresque'
+
+call plug#end()
+
+"------------------Settings----------------------
+
+if exists('+termguicolors')
+	let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
+	let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
+	set termguicolors
+endif
+
+set nocompatible
+filetype off
+filetype plugin indent on
+
+set ttyfast
+
+set laststatus=2
+set encoding=utf-8
+set autoread
+set autoindent
+
+set backspace=indent,eol,start
+
+set incsearch
+set hlsearch
+set noerrorbells
+set number
+set showcmd
+
+set splitright
+set splitbelow
+set autowrite
+set hidden
+set fileformats=unix,dos,mac
+set ignorecase
+set completeopt=menu,menuone
+set pumheight=10
+
+
+let mapleader = ","
+
+
+" pretty stuff
+" syntax enable
+set t_Co=256
+" set background=dark
+" let g:molokai_original = 1
+" let g:rehash256 = 1
+" colorscheme molokai
+
+
+" basic editor stuff
+set ruler
+set rulerformat=%l,%v
+
+
+" Better Key Mappings
+:imap jk <Esc>
+
+map <C-n> :cnext<CR>
+map <C-m> :cprevious<CR>
+nnoremap <leader>a :cclose<CR>
+
+noremap <Up> gk
+noremap <Down> gj
+noremap j gj
+noremap k gk
+
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
+" Better split switching
+map <C-j> <C-W>j
+map <C-k> <C-W>k
+map <C-h> <C-W>h
+map <C-l> <C-W>l
+
+
+autocmd BufEnter * silent! lcd %:p:h
+
+
+" Nerd Tree
+let g:NERDTreeShowHidden = 1
+let g:NERDTreeMinimalUI = 1
+let g:NERDTreeIgnore = []
+let g:NERDTreeStatusline = ''
+
+"Auto close if last
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+nmap <leader>ne :NERDTree<CR>
+
+
+" Snips and Stuff
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+" Linters
+let g:ale_linters = {
+			\   'proto': ['buf-check-lint'],
+			\}
+let g:ale_link_on_text_changed = 'never'
+let g:ale_linters_explicit = 1
+let g:ale_fixers = {'html': ['prettier'], 'scss': ['prettier']}
+
+" Coc 
+
+" updated tabs and shift tab when coc is visible
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+" Confirm completion
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>"
+
+
+
+
+" Go stuff
+let g:go_fmt_command = "goimports"
+let g:go_autodetect_gopath = 1
+let g:go_list_type = "quickfix"
+let g:go_decls_includes = "func,type"
+
+let g:go_highlight_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_function_calls = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_generate_tags = 1
+
+let g:go_def="gopls"
+let g:go_info="gopls"
+
+" Open :GoDeclsDir with ctrl-g
+nmap <C-g> :GoDeclsDir<cr>
+nmap <C-G> :GoDecls<cr>
+imap <C-g> <esc>:<C-u>GoDeclsDir<cr>
+
+
+" Go Debug
+let g:go_debug_windows = {
+	\ "vars": 	'rightbelow 60vnew',
+	\ "stack": 	'rightbelow 10new',
+	\ "out": 	'botright 30new',
+	\ }
+
+augroup go
+  autocmd!
+
+  " Show by default 4 spaces for a tab
+  autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=4 shiftwidth=4
+
+  " :GoBuild and :GoTestCompile
+  autocmd FileType go nmap <leader>b :<C-u>call <SID>build_go_files()<CR>
+
+  " :GoTest
+  autocmd FileType go nmap <leader>t  <Plug>(go-test)
+
+  " :GoRun
+  autocmd FileType go nmap <leader>r  <Plug>(go-run)
+
+  " :GoDoc
+  autocmd FileType go nmap <Leader>d <Plug>(go-doc)
+
+  " :GoCoverageToggle
+  autocmd FileType go nmap <Leader>c <Plug>(go-coverage-toggle)
+
+  " :GoInfo
+  autocmd FileType go nmap <Leader>i <Plug>(go-info)
+
+  " :GoMetaLinter
+  autocmd FileType go nmap <Leader>l <Plug>(go-metalinter)
+
+  " :GoDef but opens in a vertical split
+  autocmd FileType go nmap <Leader>v <Plug>(go-def-vertical)
+  " :GoDef but opens in a horizontal split
+  autocmd FileType go nmap <Leader>s <Plug>(go-def-split)
+  " :GoDef
+  autocmd FileType go nmap <Leader>d <Plug>(go-def)
+
+  " :GoAlternate  commands :A, :AV, :AS and :AT
+  autocmd Filetype go command! -bang A call go#alternate#Switch(<bang>0, 'edit')
+  autocmd Filetype go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
+  autocmd Filetype go command! -bang AS call go#alternate#Switch(<bang>0, 'split')
+  autocmd Filetype go command! -bang AT call go#alternate#Switch(<bang>0, 'tabe')
+
+  " Use <c-space> to trigger completion.
+  inoremap <silent><expr> <c-space> coc#refresh()
+  
+  " Use `[c` and `]c` to navigate diagnostics
+  nmap <silent> [c <Plug>(coc-diagnostic-prev)
+  nmap <silent> ]c <Plug>(coc-diagnostic-next)
+augroup END
+
+
+function! s:build_go_files()
+  let l:file = expand('%')
+  if l:file =~# '^\f\+_test\.go$'
+    call go#test#Test(0, 1)
+  elseif l:file =~# '^\f\+\.go$'
+    call go#cmd#Build(0)
+  endif
+endfunction
+
+
+" 
