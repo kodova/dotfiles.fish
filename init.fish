@@ -35,9 +35,9 @@ function link_file
     echo $argv | read -l src trgt suffix
     if test -e $trgt 
         #target exist so ensure we are not to distructive
-        set newf (readlink $src)
-        if test "$newf" = "$trgt"
-            success "link exists $src -> $trgt"
+        set real (readlink $trgt)
+        if test $real = $src
+            info "link exists $src -> $trgt"
             return
         else
             mv $trgt $trgt.$suffix
@@ -45,6 +45,7 @@ function link_file
                 or abort "failed to backup $trgt as $trgt.$suffix"
         end
     end
+
     mkdir -p (dirname $trgt)
     and ln -sf $src $trgt
     and success "linked $src -> $trgt"
@@ -52,9 +53,14 @@ function link_file
 end
 
 
+link_file $DOT_ROOT/base/config.fish $HOME/.config/fish/config.fish "backup"
+link_file $DOT_ROOT/base/profile "$HOME/.profile" "backup"
+
+
 # start the configure process
 for cfg in $DOT_ROOT/**/configure.fish
     set name (basename (dirname $cfg))
+    info "$name starting"
     source $cfg
 
     switch $status

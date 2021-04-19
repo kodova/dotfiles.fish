@@ -4,6 +4,9 @@ if not command -sq exa
     exit 1
 end
 
-alias -s ls="exa $argv"
-alias -s ll="exa -al $argv"
-
+# Replace ls with exa
+alias ls='exa -al --color=always --group-directories-first --icons' # preferred listing
+alias la='exa -a --color=always --group-directories-first --icons'  # all files and dirs
+alias ll='exa -l --color=always --group-directories-first --icons'  # long format
+alias lt='exa -aT --color=always --group-directories-first --icons' # tree listing
+alias l.="exa -a | egrep '^\.'"                                     # show only dotfiles
