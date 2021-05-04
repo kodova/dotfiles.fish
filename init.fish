@@ -36,7 +36,7 @@ function link_file
     if test -e $trgt 
         #target exist so ensure we are not to distructive
         set real (readlink $trgt)
-        if test $real = $src
+        if test "$real" = "$src"
             info "link exists $src -> $trgt"
             return
         else
@@ -53,7 +53,7 @@ function link_file
 end
 
 
-link_file $DOT_ROOT/base/config.fish $HOME/.config/fish/config.fish "backup"
+link_file $DOT_ROOT/base/config.fish "$HOME/.config/fish/config.fish" "backup"
 link_file $DOT_ROOT/base/profile "$HOME/.profile" "backup"
 
 

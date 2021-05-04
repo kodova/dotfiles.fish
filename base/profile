@@ -2,5 +2,5 @@ export AMD_VULKAN_ICD=RADV
 export BROWSER=google-chrome-stable
 export EDITOR=/usr/bin/vim
 export GTK2_RC_FILES="$HOME/.gtkrc-2.0"
-export TERM=alacritty
-export VISUAL=code
+export TERM=xterm
+export CHROME_EXECUTABLE=google-chrome-stable

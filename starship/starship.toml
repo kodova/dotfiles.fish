@@ -1,0 +1,25 @@
+add_newline = false
+
+[battery]
+disabled = false
+
+[golang]
+disabled = false
+symbol = "ﳑ "
+
+[line_break]
+disabled = true
+
+[username]
+disabled = false
+
+[aws]
+disabled = true
+
+[gcloud]
+disabled = true
+
+[kubernetes]
+disabled = false
+format = '[⛵$context](blue) '
+
