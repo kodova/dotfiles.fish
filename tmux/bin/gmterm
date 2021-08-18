@@ -1,0 +1,18 @@
+#!/usr/bin/env fish
+
+set TERM xterm-256color
+set session GM
+if test $argv[1]
+    set session $argv[1]
+end
+
+tmux has-session -t $session &> /dev/null
+and set exists true
+or set exist false
+
+if test !$exist 
+    tmux new-session -d -s $session
+    tmux rename-window -t 0 'Main'
+end
+
+tmux attach-session -t $session:0.0

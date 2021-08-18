@@ -1,0 +1,15 @@
+#!/usr/bin/env fish
+
+set window Cluster
+set windowExists (tmux list-windows | grep $window)
+
+if test "$windowExists" != ""
+    tmux kill-window -t :$window
+end
+
+tmux new-window -d -n $window
+
+tmux split-window -c $siteDir -v -t :$window
+
+tmux send-keys -t ":$window.0" "k9s --context prod" Enter
+tmux send-keys -t ":$window.1" "k9s --context sand" Enter

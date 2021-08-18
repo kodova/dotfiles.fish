@@ -1,0 +1,32 @@
+#!/usr/bin/env fish
+
+if test (count $argv) -eq 0
+    set target (pwd)
+else 
+    set target $argv[1]
+end
+
+set name (basename $target)
+
+set exits (tmux list-windows | grep $name)
+
+if test "$name" != ""
+    tmux kill-window -t :$name
+end
+
+tmux new-window -d -n $name -c $target
+
+while test "$name" = ""; 
+    set exits (tmux list-windows | grep $name)
+    echo waiting; 
+end
+
+
+tmux split-window -c $target -v -t :$name
+tmux split-window -c $target -h -t :$name
+
+tmux resize-pane -t :$name.1 -y 25
+
+if test -e $target/.local/init.fish
+    source $target.local/init.fish
+end
