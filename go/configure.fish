@@ -5,3 +5,4 @@ if not command -sq go
 end
 
 fish_add_path (go env GOPATH)/bin
+set -x GOPRIVATE "github.com/geniusmonkey"

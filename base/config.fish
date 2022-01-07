@@ -150,3 +150,7 @@ set -gx PROJECT_PATHS ~/Workspace
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/home/patrick/Documents/google-cloud-sdk/path.fish.inc' ]; . '/home/patrick/Documents/google-cloud-sdk/path.fish.inc'; end
+
+
+## Private go
+set -x GOPRIVATE github.com/geniusmonkey
