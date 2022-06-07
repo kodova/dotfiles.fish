@@ -8,9 +8,9 @@ end
 
 set name (basename $target)
 
-set exits (tmux list-windows | grep $name)
+set exists (tmux list-windows | grep $name)
 
-if test "$name" != ""
+if test "$exists" != ""
     tmux kill-window -t :$name
 end
 

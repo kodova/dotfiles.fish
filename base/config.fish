@@ -154,3 +154,6 @@ if [ -f '/home/patrick/Documents/google-cloud-sdk/path.fish.inc' ]; . '/home/pat
 
 ## Private go
 set -x GOPRIVATE github.com/geniusmonkey
+
+
+set -x CLOUDSDK_PYTHON (which python2)
